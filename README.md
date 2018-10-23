@@ -1,2 +1,2 @@
 # ConnectedRisc
-Eventual goal: Watch our ted talk on our own machine.
+Eventual goal: Watch our own TED talk on our own machine.
