@@ -23,13 +23,13 @@ The architectural specification will use RTL to define instruction operation.
 
 `B <- A` defines the assignment of the value of `A` to `B`.
 
-`R[n]` defines the `n`th GPR.
+`R[n]` defines the value in the `n`th GPR.
 
-`S[n]` defines the `n`th System Register.
+`S[n]` defines the value in the `n`th System Register.
 
-`M[n]` defines the memory address at address `n`.
+`M[n]` defines the value of the byte at the memory address `n`.
 
-`In` defines a sign-extended immediate value of size `n`.
+`In` defines a sign-extended immediate value of size `n` bytes.
 
 ## Instruction Definitions
 
@@ -38,11 +38,51 @@ There are 3 instruction formats: 2 operand, 1 operand, and 0 operand.
 2 operand instructions usually use two GPRs as operands.
 The exception are the instructions that move data to and from the system registers.
 
+The two operand instructions are:
+- And
+- Subtract
+- And
+- Or
+- Xor
+- Compare
+- Shift Left Logical
+- Shift Right Logical
+- Move to system register
+- Move from system register
+- Move
+- Load Byte
+- Store Byte
+
 1 operand instructions use one GPR as an operand, and may have immediate operands too.
+
+The one-operand instructions are:
+- Load Immediate
+- Sign Extend
+- Jump and link register
+- Shift Right Arithmetic once
+- Push register
+- Pop register
+- Stack-relative load
+- Stack-relative store
+- Byte Swap (Desired, might have to make some room) 
 
 0 operand instructions do not use any registers as operands, but may have immediate operands.
 
-
+The zero-operand instructions are:
+- Noop
+- Halt
+- Syscall
+- Return
+- Enable interrupts
+- Disable interrupts
+- Branch equal/zero
+- Branch not equal/nonzero
+- Branch if carry
+- Branch if overflow
+- Branch less than
+- Branch greater than or equal
+- Branch less than unsigned
+- Branch greater than or equal unsigned
 
 
 
