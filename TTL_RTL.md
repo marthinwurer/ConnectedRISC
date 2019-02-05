@@ -31,6 +31,15 @@ The architectural specification will use RTL to define instruction operation.
 
 `In` defines a sign-extended immediate value of size `n` bytes.
 
+`PC`, `SP`, and `SR` denote the Program counter, the stack pointer, and the status register, respectively.
+
+The status register also has four fields.
+These are `Z`ero, `N`egative, `C`arry, and `O`verflow.
+They are set after every instruction that would use the ALU.
+In-depth definitions will note if these are set. 
+
+Unless otherwise noted, each instruction also executes `PC <- PC + 1`
+
 ## Instruction Definitions
 
 There are 3 instruction formats: 2 operand, 1 operand, and 0 operand. 
@@ -39,7 +48,7 @@ There are 3 instruction formats: 2 operand, 1 operand, and 0 operand.
 The exception are the instructions that move data to and from the system registers.
 
 The two operand instructions are:
-- And
+- Add
 - Subtract
 - And
 - Or
@@ -84,6 +93,73 @@ The zero-operand instructions are:
 - Branch less than unsigned
 - Branch greater than or equal unsigned
 
+### In depth definitions
+
+#### Add
+
+`add rd rs`
+
+RTL: `Rd <- Rd + Rs`
+
+Status register is set.
+
+#### Subtract
+
+`sub rd rs`
+
+RTL: `Rd <- Rd - Rs`
+
+Status register is set.
+
+#### And
+
+`and rd rs`
+
+RTL: `Rd <- Rd & Rs`
+
+Status register is set.
+
+#### Or
+
+`or rd rs`
+
+RTL: `Rd <- Rd | Rs`
+
+Status register is set.
+
+#### Xor
+
+`xor rd rs`
+
+RTL: `Rd <- Rd ^ Rs`
+
+Status register is set.
+
+#### Compare
+
+`cmp rd rs`
+
+RTL: `Rd - Rs`
+
+Status register is set.
+
+This operation does the same thing as subtract but it does not store the result of the operation.
+
+#### Shift Left Logical
+
+`sll rd rs`
+
+RTL: `Rd <- Rd << Rs`
+
+Status register is set.
+
+#### Shift Right Logical
+
+`srl rd rs`
+
+RTL: `Rd <- Rd >> Rs`
+
+Status register is set.
 
 
 
