@@ -38,7 +38,6 @@ These are `Z`ero, `N`egative, `C`arry, and `O`verflow.
 They are set after every instruction that would use the ALU.
 In-depth definitions will note if these are set. 
 
-Unless otherwise noted, each instruction also executes `PC <- PC + 1`
 
 ## Instruction Definitions
 
@@ -94,6 +93,14 @@ The zero-operand instructions are:
 - Branch greater than or equal unsigned
 
 ### In depth definitions
+
+Each instruction definition consists of a brief description of the instruction,
+followed by the assembly representation of the instruction and its RTL definition.
+
+If the status register is set after instruction execution, the writeup will say so.
+
+Unless otherwise noted, each instruction also executes `PC <- PC + 1`.
+This increments the `PC` to point to the next instruction.
 
 #### Add
 
@@ -163,6 +170,42 @@ Status register is set.
 
 
 
+#### Move to system register
+#### Move from system register
+#### Move
+#### Load Byte
+#### Store Byte
+
+1 operand instructions use one GPR as an operand, and may have immediate operands too.
+
+The one-operand instructions are:
+#### Load Immediate
+#### Sign Extend
+#### Jump and link register
+#### Shift Right Arithmetic once
+#### Push register
+#### Pop register
+#### Stack-relative load
+#### Stack-relative store
+#### Byte Swap (Desired, might have to make some room) 
+
+0 operand instructions do not use any registers as operands, but may have immediate operands.
+
+The zero-operand instructions are:
+#### Noop
+#### Halt
+#### Syscall
+#### Return
+#### Enable interrupts
+#### Disable interrupts
+#### Branch equal/zero
+#### Branch not equal/nonzero
+#### Branch if carry
+#### Branch if overflow
+#### Branch less than
+#### Branch greater than or equal
+#### Branch less than unsigned
+#### Branch greater than or equal unsigned
 
 
 
