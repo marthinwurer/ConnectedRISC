@@ -104,6 +104,8 @@ This increments the `PC` to point to the next instruction.
 
 #### Add
 
+Adds the values in `rd` and `rs` together and stores the result in `rd`.
+
 `add rd rs`
 
 RTL: `Rd <- Rd + Rs`
@@ -111,6 +113,8 @@ RTL: `Rd <- Rd + Rs`
 Status register is set.
 
 #### Subtract
+
+Subtracts the value in `rs` from `rd` and stores the result in `rd`.
 
 `sub rd rs`
 
@@ -120,6 +124,8 @@ Status register is set.
 
 #### And
 
+Ands the values in `rd` and `rs` together and stores the result in `rd`.
+
 `and rd rs`
 
 RTL: `Rd <- Rd & Rs`
@@ -127,6 +133,8 @@ RTL: `Rd <- Rd & Rs`
 Status register is set.
 
 #### Or
+
+Ors the values in `rd` and `rs` together and stores the result in `rd`.
 
 `or rd rs`
 
@@ -136,6 +144,8 @@ Status register is set.
 
 #### Xor
 
+Xors the values in `rd` and `rs` together and stores the result in `rd`.
+
 `xor rd rs`
 
 RTL: `Rd <- Rd ^ Rs`
@@ -144,15 +154,18 @@ Status register is set.
 
 #### Compare
 
+Subtracts the value in `rs` from `rd` but does not store the result.
+The status register is still set.
+
 `cmp rd rs`
 
 RTL: `Rd - Rs`
 
 Status register is set.
 
-This operation does the same thing as subtract but it does not store the result of the operation.
-
 #### Shift Left Logical
+
+Shift the value in `rd` left by `rs` places.
 
 `sll rd rs`
 
@@ -162,25 +175,78 @@ Status register is set.
 
 #### Shift Right Logical
 
+Shift the value in `rd` right by `rs` places.
+
 `srl rd rs`
 
 RTL: `Rd <- Rd >> Rs`
 
 Status register is set.
 
-
-
 #### Move to system register
+
+Set the value in the system register `sd` to the value of the general purpose register `rs`.
+
+`mts sd rs`
+
+RTL: `S[sd] <- R[rs]`
+
 #### Move from system register
+
+Set the value in the general purpose register `rd` to the value of the system register `ss`.
+
+`mtr rd ss`
+
+RTL: `R[rd] <- S[ss]`
+
 #### Move
+
+Set the value in `rd` to the value of `rs`.
+
+`mov rd rs`
+
+RTL: `R[rd] <- R[rs]`
+
 #### Load Byte
+
+Set the lower byte of `rd` to the value in memory at the address stored in the register `rs`.
+
+`ldb rd as`
+
+RTL: `R[rd] <- M[rs]`
+
 #### Store Byte
 
-1 operand instructions use one GPR as an operand, and may have immediate operands too.
+Set the byte in memory at the address stored in register of `rs` to the value of the lower byte in `rd`.
 
-The one-operand instructions are:
+`stb rs ad`
+
+RTL: `M[rs] <- R[rd][7:0]`
+
 #### Load Immediate
+
+Set the register `rd` to the value in the next two instruction words, then increment `PC` by 3.
+
+`ldi rd I16`
+
+RTL: 
+```
+PC <- PC + 1
+R[rd][15:8] <- M[PC]
+PC <- PC + 1
+R[rd][7:0] <- M[PC]
+PC <- PC + 1
+```
+
 #### Sign Extend
+
+Set the upper bits of `rd` to the value of the 7th bit of `rd`.
+
+`sxt rd`
+
+RTL: `R[rd][15:8] <- R[rd][7]`
+
+
 #### Jump and link register
 #### Shift Right Arithmetic once
 #### Push register
