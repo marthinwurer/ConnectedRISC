@@ -229,7 +229,7 @@ Set the register `rd` to the value in the next two instruction words, then incre
 
 `ldi rd I16`
 
-RTL: 
+RTL:
 ```
 PC <- PC + 1
 R[rd][15:8] <- M[PC]
@@ -246,32 +246,171 @@ Set the upper bits of `rd` to the value of the 7th bit of `rd`.
 
 RTL: `R[rd][15:8] <- R[rd][7]`
 
-
 #### Jump and link register
+
+Increment the `PC` like usual, then swap it with `rd`.
+
+`jlr rd`
+
+RTL: `PC <- R[rd] AND R[rd] <- PC + 1`
+
 #### Shift Right Arithmetic once
+
+Shift `rd` to the right by one position, with the highest bit staying the same as it was before.
+
+`sra rd`
+
+RTL: `R[rd] <- R[rd] >>> 1`
+
+Status register is set.
+
 #### Push register
+
+Push a register's value onto the stack.
+
+`push rd`
+
+RTL:
+```
+SP <- SP - 1
+M[SP] <- R[rd][15:8]
+SP <- SP - 1
+M[SP] <- R[rd][7:0]
+```
+
 #### Pop register
-#### Stack-relative load
-#### Stack-relative store
+Pop a register's value from the stack.
+
+`pop rd`
+
+RTL:
+```
+R[rd][7:0] <- M[SP]
+SP <- SP + 1
+R[rd][15:8] <- M[SP]
+SP <- SP + 1
+```
+
+#### Load Stack-Relative
+
+Set the lower byte of `rd` to the value in memory offset from `SP` by the 8-bit sign-extended immediate value.
+
+`lsr rd I8`
+
+RTL: `R[rd][7:0] <- M[SP + I8]`
+
+#### Store Stack-Relative
+
+Set the value in memory offset from `SP` by the 8-bit sign-extended immediate value to the lower byte in `rs`.
+
+`ssr rs I8`
+
+RTL: `M[SP + I8] <- R[rs][7:0]`
+
 #### Byte Swap (Desired, might have to make some room) 
 
-0 operand instructions do not use any registers as operands, but may have immediate operands.
+Swap the high and low bytes of `rd`.
 
-The zero-operand instructions are:
+`bs rd`
+
+RTL: `R[rd][15:8] <- R[rd][7:0] AND R[rd][7:0] <- R[rd][15:8]`
+
 #### Noop
+
+No op. Just increment the program counter.
+
+`nop`
+
+RTL: `PC <- PC + 1`
+
 #### Halt
+
+Halt execution until processor is restarted or reset.
+
+`hlt`
+
+RTL: `Stop processor`
+
 #### Syscall
+
+Throw a syscall interrupt. TODO with memory management.
+
 #### Return
+
+Return back to user space. TODO with memory management.
+
 #### Enable interrupts
+
+Enable interrupts if in system mode. TODO with memory management.
+
 #### Disable interrupts
+
+Disable interrupts if in system mode. TODO with memory management.
+
 #### Branch equal/zero
+
+Branch if the result of the last operation is zero. to a sign-extended immediate offset of `PC`.
+
+`beq I8`
+
+RTL: `PC <- PC + I8 if Z = 1 else PC + 1`
+
 #### Branch not equal/nonzero
+
+Branch if the result of the last operation is not zero. to a sign-extended immediate offset of `PC`.
+
+`bne I8`
+
+RTL: `PC <- PC + I8 if Z = 0 else PC + 1`
+
 #### Branch if carry
+
+Branch if the result of the last operation set the carry flag. to a sign-extended immediate offset of `PC`.
+
+`bic I8`
+
+RTL: `PC <- PC + I8 if C = 1 else PC + 1`
+
 #### Branch if overflow
+
+Branch if the result of the last operation set the overflow flag. to a sign-extended immediate offset of `PC`.
+
+`bio I8`
+
+RTL: `PC <- PC + I8 if O = 1 else PC + 1`
+
 #### Branch less than
+
+Branch if the `O` and `N` flags are not equal. to a sign-extended immediate offset of `PC`.
+
+`blt I8`
+
+RTL: `PC <- PC + I8 if N != O else PC + 1`
+
 #### Branch greater than or equal
+
+Branch if the result of the last operation did not set the negative flag. to a sign-extended immediate offset of `PC`.
+
+`bge I8`
+
+RTL: `PC <- PC + I8 if N = 0 else PC + 1`
+
 #### Branch less than unsigned
+
+Branch if the result of the last operation set the negative flag. to a sign-extended immediate offset of `PC`.
+
+`blu I8`
+
+RTL: `PC <- PC + I8 if N = 1 else PC + 1`
+
 #### Branch greater than or equal unsigned
+
+Branch if the result of the last operation set the negative flag. to a sign-extended immediate offset of `PC`.
+
+`bgu I8`
+
+RTL: `PC <- PC + I8 if N = 1 else PC + 1`
+
 
 
 
