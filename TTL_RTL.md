@@ -349,7 +349,7 @@ Disable interrupts if in system mode. TODO with memory management.
 
 #### Branch equal/zero
 
-Branch if the result of the last operation is zero. to a sign-extended immediate offset of `PC`.
+Set the `PC` to a sign-extended immediate offset of `PC` if the result of the last operation set the zero flag. 
 
 `beq I8`
 
@@ -357,7 +357,7 @@ RTL: `PC <- PC + I8 if Z = 1 else PC + 1`
 
 #### Branch not equal/nonzero
 
-Branch if the result of the last operation is not zero. to a sign-extended immediate offset of `PC`.
+Set the `PC` to a sign-extended immediate offset of `PC` if the result of the last operation did not set the zero flag. 
 
 `bne I8`
 
@@ -365,7 +365,7 @@ RTL: `PC <- PC + I8 if Z = 0 else PC + 1`
 
 #### Branch if carry
 
-Branch if the result of the last operation set the carry flag. to a sign-extended immediate offset of `PC`.
+Set the `PC` to a sign-extended immediate offset of `PC` if the result of the last operation set the carry flag. 
 
 `bic I8`
 
@@ -373,7 +373,7 @@ RTL: `PC <- PC + I8 if C = 1 else PC + 1`
 
 #### Branch if overflow
 
-Branch if the result of the last operation set the overflow flag. to a sign-extended immediate offset of `PC`.
+Set the `PC` to a sign-extended immediate offset of `PC` if the result of the last operation set the overflow flag. 
 
 `bio I8`
 
@@ -381,7 +381,7 @@ RTL: `PC <- PC + I8 if O = 1 else PC + 1`
 
 #### Branch less than
 
-Branch if the `O` and `N` flags are not equal. to a sign-extended immediate offset of `PC`.
+Set the `PC` to a sign-extended immediate offset of `PC` if the `O` and `N` flags are not equal.
 
 `blt I8`
 
@@ -389,7 +389,7 @@ RTL: `PC <- PC + I8 if N != O else PC + 1`
 
 #### Branch greater than or equal
 
-Branch if the result of the last operation did not set the negative flag. to a sign-extended immediate offset of `PC`.
+Set the `PC` to a sign-extended immediate offset of `PC` if the result of the last operation did not set the negative flag. 
 
 `bge I8`
 
@@ -397,7 +397,7 @@ RTL: `PC <- PC + I8 if N = 0 else PC + 1`
 
 #### Branch less than unsigned
 
-Branch if the result of the last operation set the negative flag. to a sign-extended immediate offset of `PC`.
+Set the `PC` to a sign-extended immediate offset of `PC` if the result of the last operation did not set the carry flag. 
 
 `blu I8`
 
@@ -405,7 +405,7 @@ RTL: `PC <- PC + I8 if N = 1 else PC + 1`
 
 #### Branch greater than or equal unsigned
 
-Branch if the result of the last operation set the negative flag. to a sign-extended immediate offset of `PC`.
+Set the `PC` to a sign-extended immediate offset of `PC` if the result of the last operation set the carry flag. 
 
 `bgu I8`
 
@@ -414,6 +414,7 @@ RTL: `PC <- PC + I8 if N = 1 else PC + 1`
 
 
 
+## Original notes
 
 Basic architecture description:
 
