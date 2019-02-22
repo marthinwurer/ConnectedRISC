@@ -4,9 +4,9 @@
 
 This file describes the basic Register-Transfer Language (RTL) specification of the Computer Architecture Testbed (CAT) CPU.
 
-CAT is a stored-program load-store 8-bit CPU with a 16 bit address space.
+CAT is a stored-program, load-store, 8-bit CPU with a 16 bit address space.
 It has 4 general-purpose registers and 4 system registers, all of which are 16 bits.
-Instructions are a mix of 2, 1, and 0 operand, and are a fixed length of one byte (8 bits).
+Instructions are a mix of 2, 1, and 0 operands, and are all a fixed length of one byte (8 bits).
 There are three addressing modes, but each of them are instruction-specific.
 These are register, 16 bit immediate, 8 bit immediate, and Stack-Pointer relative addressing.
 
@@ -18,6 +18,17 @@ The other 4 are system registers (SRs).
 The four system registers are the Program Counter (PC), the Stack Pointer (SP), the Status Register, and a reserved register.
 
 ## Terminology
+
+The assembly representation starts with the assembly symbol of the instruction, followed by its operands.
+The operands are separated by whitespace.
+The operands are either registers or immediate values.
+
+Example operands and their descriptions:
+- `rd`: destination register (first operand and destination)
+- `rs`: source register (second operand or source)
+- `ar`: address register (register that an address will come from )
+- `ss`: system source (system register source)
+- `sd`: system destination (system register destination)
 
 The architectural specification will use RTL to define instruction operation.
 
@@ -33,11 +44,12 @@ The architectural specification will use RTL to define instruction operation.
 
 `PC`, `SP`, and `SR` denote the Program counter, the stack pointer, and the status register, respectively.
 
+`TR` is a temporary register used for intermediate values that is not programmer accessible.
+
 The status register also has four fields.
 These are `Z`ero, `N`egative, `C`arry, and `O`verflow.
 They are set after every instruction that would use the ALU.
 In-depth definitions will note if these are set. 
-
 
 ## Instruction Definitions
 
@@ -209,19 +221,19 @@ RTL: `R[rd] <- R[rs]`
 
 #### Load Byte
 
-Set the lower byte of `rd` to the value in memory at the address stored in the register `rs`.
+Set the lower byte of `rd` to the value in memory at the address stored in the register `ar`.
 
-`ldb rd as`
+`ldb rd ar`
 
-RTL: `R[rd] <- M[rs]`
+RTL: `R[rd] <- M[ar]`
 
 #### Store Byte
 
-Set the byte in memory at the address stored in register of `rs` to the value of the lower byte in `rd`.
+Set the byte in memory at the address stored in register of `ar` to the value of the lower byte in `rs`.
 
-`stb rs ad`
+`stb rs ar`
 
-RTL: `M[rs] <- R[rd][7:0]`
+RTL: `M[ar] <- R[rs][7:0]`
 
 #### Load Immediate
 
@@ -252,7 +264,13 @@ Increment the `PC` like usual, then swap it with `rd`.
 
 `jlr rd`
 
-RTL: `PC <- R[rd] AND R[rd] <- PC + 1`
+RTL:
+```
+PC <- PC + 1
+TR <- R[rd]
+R[rd] <- PC
+PC <- TR
+```
 
 #### Shift Right Arithmetic once
 
@@ -313,7 +331,12 @@ Swap the high and low bytes of `rd`.
 
 `bs rd`
 
-RTL: `R[rd][15:8] <- R[rd][7:0] AND R[rd][7:0] <- R[rd][15:8]`
+RTL:
+```
+TR <- R[rd]
+R[rd][15:8] <- TR[7:0]
+R[rd][7:0] <- TR[15:8]
+```
 
 #### Noop
 
@@ -389,7 +412,7 @@ RTL: `PC <- PC + I8 if N != O else PC + 1`
 
 #### Branch greater than or equal
 
-Set the `PC` to a sign-extended immediate offset of `PC` if the result of the last operation did not set the negative flag. 
+Set the `PC` to a sign-extended immediate offset of `PC` if the `O` and `N` flags are not equal. 
 
 `bge I8`
 
